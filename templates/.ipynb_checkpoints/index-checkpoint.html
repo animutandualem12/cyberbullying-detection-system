@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberbullying Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --danger: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --critical: #d00000;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .severity-critical {
+            background: linear-gradient(45deg, #d00000, #9d0208);
+            color: white;
+        }
+
+        .severity-high {
+            background: linear-gradient(45deg, #dc2f02, #e85d04);
+            color: white;
+        }
+
+        .severity-medium {
+            background: linear-gradient(45deg, #f8961e, #f9c74f);
+            color: #333;
+        }
+
+        .severity-low {
+            background: linear-gradient(45deg, #90be6d, #4d908e);
+            color: white;
+        }
+
+        .severity-none {
+            background: linear-gradient(45deg, #4cc9f0, #4895ef);
+            color: white;
+        }
+
+        .category-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 25px;
+            font-weight: 600;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="glass-card text-center mb-4">
+            <h1 class="display-5"><i class="fas fa-shield-alt text-primary"></i> Cyberbullying Detection System</h1>
+            <p class="lead text-muted">Advanced detection of 20 types of cyberbullying and hate speech</p>
+        </div>
+
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- Text Analysis -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-search me-2"></i> Analyze Text</h3>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="inputText" rows="4"
+                                  placeholder="Enter text to analyze for cyberbullying...">Your religion is full of terrorists and extremists</textarea>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="analyzeText()" id="analyzeBtn">
+                        <i class="fas fa-play me-2"></i> Analyze Text
+                    </button>
+
+                    <div class="loading mt-3" id="loading">
+                        <div class="spinner"></div>
+                        <p>Analyzing text for cyberbullying...</p>
+                    </div>
+
+                    <div id="resultCard" class="mt-4"></div>
+                </div>
+
+                <!-- Batch Analysis -->
+                <div class="glass-card mt-4">
+                    <h3><i class="fas fa-tasks me-2"></i> Batch Analysis</h3>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="batchText" rows="4"
+                                  placeholder="Enter multiple texts (one per line)..."></textarea>
+                    </div>
+                    <button class="btn btn-secondary btn-lg" onclick="analyzeBatch()" id="batchBtn">
+                        <i class="fas fa-list me-2"></i> Analyze Batch
+                    </button>
+
+                    <div id="batchResults" class="mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Quick Stats -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-chart-bar me-2"></i> System Statistics</h3>
+                    <div class="row text-center" id="stats">
+                        <div class="col-6 mb-3">
+                            <div class="p-3 rounded bg-light">
+                                <h2 class="mb-0" id="totalAnalyses">0</h2>
+                                <small>Total Analyses</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="p-3 rounded bg-danger text-white">
+                                <h2 class="mb-0" id="toxicRate">0%</h2>
+                                <small>Toxicity Rate</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded bg-success text-white">
+                                <h2 class="mb-0" id="accuracy">0%</h2>
+                                <small>Accuracy</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded bg-info text-white">
+                                <h2 class="mb-0" id="status">...</h2>
+                                <small>Status</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-bolt me-2"></i> Quick Actions</h3>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="loadTestExamples()">
+                            <i class="fas fa-vial me-2"></i> Load Test Examples
+                        </button>
+                        <button class="btn btn-outline-success" onclick="clearAll()">
+                            <i class="fas fa-broom me-2"></i> Clear All
+                        </button>
+                        <button class="btn btn-outline-info" onclick="showCategories()">
+                            <i class="fas fa-list me-2"></i> View Categories
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline-warning">
+                            <i class="fas fa-dashboard me-2"></i> Advanced Dashboard
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Severity Guide -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-exclamation-triangle me-2"></i> Severity Levels</h3>
+                    <div class="mt-3">
+                        <span class="badge severity-critical me-1 mb-1">Critical</span>
+                        <span class="badge severity-high me-1 mb-1">High</span>
+                        <span class="badge severity-medium me-1 mb-1">Medium</span>
+                        <span class="badge severity-low me-1 mb-1">Low</span>
+                        <span class="badge severity-none">None</span>
+                    </div>
+                    <p class="small text-muted mt-2 mb-0">
+                        Critical: Immediate action required<br>
+                        High: Urgent moderation needed<br>
+                        Medium: Review and monitor<br>
+                        Low: Educational approach
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="glass-card text-center mt-4">
+            <p class="mb-0">
+                <i class="fas fa-code"></i> Cyberbullying Detection System v2.0 |
+                <i class="fas fa-heart text-danger"></i> Detecting 20 types of cyberbullying |
+                <i class="fas fa-shield-alt text-primary"></i> Promoting Online Safety
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal for Categories -->
+    <div class="modal fade" id="categoriesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-list me-2"></i> Cyberbullying Categories</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="categoriesList">
+                    Loading categories...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load stats on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadStatistics();
+        });
+
+        function analyzeText() {
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) {
+                alert('Please enter text to analyze');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultCard').innerHTML = '';
+            document.getElementById('analyzeBtn').disabled = true;
+
+            // Send request
+            fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayResult(data);
+                    loadStatistics();
+                })
+                .catch(error => {
+                    document.getElementById('resultCard').innerHTML = `
+                        <div class="alert alert-danger">
+                            <h4>Error!</h4>
+                            <p>${error.message}</p>
+                        </div>
+                    `;
+                })
+                .finally(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('analyzeBtn').disabled = false;
+                });
+        }
+
+        function displayResult(data) {
+            const resultCard = document.getElementById('resultCard');
+            const severityClass = `severity-${data.severity}`;
+
+            // Create category badges
+            let categoryBadges = '';
+            if (data.categories && data.categories.length > 0) {
+                categoryBadges = data.categories.map(cat =>
+                    `<span class="badge category-badge bg-secondary">${cat.replace('_', ' ')}</span>`
+                ).join('');
+            }
+
+            // Create suggestions list
+            let suggestionsList = '';
+            if (data.suggestions && data.suggestions.length > 0) {
+                suggestionsList = data.suggestions.map(s => `<li>${s}</li>`).join('');
+            }
+
+            resultCard.innerHTML = `
+                    <div class="glass-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0">Analysis Result</h4>
+                            <span class="badge ${severityClass} fs-5">${data.severity.toUpperCase()}</span>
+                        </div>
+
+                        <div class="alert ${data.is_toxic ? 'alert-danger' : 'alert-success'}">
+                            <h4 class="alert-heading">
+                                <i class="fas ${data.is_toxic ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i>
+                                ${data.prediction} (${data.confidence}% confidence)
+                            </h4>
+                            <p><strong>Text:</strong> "${data.text}"</p>
+                            <hr>
+                            <p><strong>Score:</strong> ${data.score}/1.0</p>
+                            <p><strong>Primary Category:</strong> ${data.primary_category || 'None'}</p>
+
+                            ${categoryBadges ? `<div class="mt-2"><strong>Categories:</strong><br>${categoryBadges}</div>` : ''}
+
+                            ${data.explanation ? `<p><strong>Explanation:</strong> ${data.explanation}</p>` : ''}
+                        </div>
+
+                        ${suggestionsList ? `
+                            <div class="mt-3">
+                                <h5><i class="fas fa-lightbulb me-2"></i> Recommendations</h5>
+                                <ul class="list-group">${suggestionsList}</ul>
+                            </div>
+                        ` : ''}
+
+                        ${data.detailed_analysis ? `
+                            <div class="mt-3">
+                                <h5><i class="fas fa-search me-2"></i> Detailed Analysis</h5>
+                                <div class="small text-muted">
+                                    <p>Patterns: ${data.detailed_analysis.pattern_matches.join(', ') || 'None'}</p>
+                                    <p>Toxic Words: ${data.detailed_analysis.toxic_words.join(', ') || 'None'}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+        }
+
+        function analyzeBatch() {
+            const batchText = document.getElementById('batchText').value.trim();
+            if (!batchText) {
+                alert('Please enter texts to analyze');
+                return;
+            }
+
+            const texts = batchText.split('\n').filter(t => t.trim());
+
+            // Disable button and show loading
+            const batchBtn = document.getElementById('batchBtn');
+            batchBtn.disabled = true;
+            batchBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyzing...';
+
+            fetch('/api/batch-analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texts: texts })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    displayBatchResults(data);
+                    loadStatistics();
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    batchBtn.disabled = false;
+                    batchBtn.innerHTML = '<i class="fas fa-list me-2"></i> Analyze Batch';
+                });
+        }
+
+        function displayBatchResults(data) {
+            const resultsDiv = document.getElementById('batchResults');
+
+            let severityHtml = '';
+            if (data.severity_distribution) {
+                severityHtml = `
+                        <div class="row text-center mb-3">
+                            <div class="col">
+                                <div class="p-2 severity-critical rounded">
+                                    <h5 class="mb-0">${data.severity_distribution.critical || 0}</h5>
+                                    <small>Critical</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2 severity-high rounded">
+                                    <h5 class="mb-0">${data.severity_distribution.high || 0}</h5>
+                                    <small>High</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2 severity-medium rounded">
+                                    <h5 class="mb-0">${data.severity_distribution.medium || 0}</h5>
+                                    <small>Medium</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-2 severity-low rounded">
+                                    <h5 class="mb-0">${data.severity_distribution.low || 0}</h5>
+                                    <small>Low</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            }
+
+            resultsDiv.innerHTML = `
+                    <div class="glass-card">
+                        <h4>Batch Results</h4>
+                        <div class="row text-center mb-3">
+                            <div class="col-3">
+                                <div class="p-3 bg-light rounded">
+                                    <h3 class="mb-0">${data.total}</h3>
+                                    <small>Total</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-3 bg-danger text-white rounded">
+                                    <h3 class="mb-0">${data.toxic_count}</h3>
+                                    <small>Toxic</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-3 bg-success text-white rounded">
+                                    <h3 class="mb-0">${data.non_toxic_count}</h3>
+                                    <small>Safe</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-3 bg-warning rounded">
+                                    <h3 class="mb-0">${data.toxicity_rate.toFixed(1)}%</h3>
+                                    <small>Toxicity Rate</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${severityHtml}
+
+                        <div class="mt-3" style="max-height: 300px; overflow-y: auto;">
+                            ${data.predictions.map((p, i) => `
+                                <div class="border-start border-${p.is_toxic ? 'danger' : 'success'} border-4 ps-3 py-2 mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge severity-${p.severity}">${p.severity}</span>
+                                        <small class="text-muted">#${i + 1}</small>
+                                    </div>
+                                    <p class="mb-1 small">${p.text.substring(0, 80)}${p.text.length > 80 ? '...' : ''}</p>
+                                    <div class="small">
+                                        <span class="badge bg-${p.is_toxic ? 'danger' : 'success'}">${p.prediction}</span>
+                                        <span class="text-muted ms-2">${p.confidence}%</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+        }
+
+        function loadStatistics() {
+            fetch('/api/statistics')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalAnalyses').textContent = data.total_analyses;
+                    document.getElementById('toxicRate').textContent = data.toxicity_rate.toFixed(1) + '%';
+                    document.getElementById('accuracy').textContent = data.avg_confidence.toFixed(1) + '%';
+                    document.getElementById('status').textContent = data.system_status;
+
+                    // Color code status
+                    const statusElem = document.getElementById('status');
+                    statusElem.className = 'mb-0 ' +
+                        (data.system_status === 'online' ? 'text-success' :
+                            data.system_status === 'error' ? 'text-danger' : 'text-warning');
+                })
+                .catch(error => {
+                    console.error('Error loading stats:', error);
+                });
+        }
+
+        function loadTestExamples() {
+            fetch('/api/test-examples')
+                .then(response => response.json())
+                .then(data => {
+                    const texts = data.examples.map(e => e.text);
+                    document.getElementById('batchText').value = texts.join('\n');
+                    alert('Loaded test examples! Click "Analyze Batch" to test.');
+                });
+        }
+
+        function showCategories() {
+            fetch('/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    const modalContent = document.getElementById('categoriesList');
+                    modalContent.innerHTML = `
+                            <div class="row">
+                                ${data.categories.map(cat => `
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h6 class="card-title">${cat.name}</h6>
+                                                <p class="card-text small text-muted">${cat.description}</p>
+                                                <span class="badge bg-primary">${cat.id}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+
+                    // Show modal
+                    new bootstrap.Modal(document.getElementById('categoriesModal')).show();
+                });
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('batchText').value = '';
+            document.getElementById('resultCard').innerHTML = '';
+            document.getElementById('batchResults').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

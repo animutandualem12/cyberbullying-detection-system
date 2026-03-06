@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberbullying Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #0d1117;
+            color: #eaf4ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+        }
+
+        .badge-safe {
+            background-color: #00baff;
+        }
+
+        .badge-toxic {
+            background-color: #ff4d6d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+
+        <!-- 🧠 Existing Dashboard Content -->
+        <h1 class="text-center mb-4">Cyberbullying Detection System</h1>
+
+        <!-- 🗂️ ✅ Add this History Section anywhere inside your main container -->
+        
+        <!-- 🗂️ End History Section -->
+
+    </div>
+
+    <!-- ✅ Put this fetch() script at the very end, before </body> -->
+    <script>
+        fetch('http://127.0.0.1:8000/api/history')   // 👈 FastAPI backend endpoint
+            .then(res => res.json())
+            .then(data => {
+                const tableBody = document.querySelector('#historyTable tbody');
+                tableBody.innerHTML = '';
+
+                data.forEach((item, index) => {
+                    const label = item.result.toLowerCase() === 'toxic' ? 'badge-toxic' : 'badge-safe';
+                    const row = `
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${item.text}</td>
+                  <td><span class="badge ${label}">${item.result}</span></td>
+                  <td>${item.confidence}</td>
+                  <td>${item.category || '-'}</td>
+                  <td>${item.severity || '-'}</td>
+                </tr>
+              `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(err => {
+                console.error('Error loading history:', err);
+                const tableBody = document.querySelector('#historyTable tbody');
+                tableBody.innerHTML = `
+              <tr><td colspan="6" class="text-danger text-center">Failed to load history data</td></tr>
+            `;
+            });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Cyberbullying Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: url('static/images/cyberbullying-victim.png') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            position: relative;
+        }
+
+            body::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+                z-index: 0;
+            }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(12px) saturate(130%);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 380px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+            .logo i {
+                color: #ff4d6d;
+            }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #ddd;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+            input:focus {
+                border-color: #4cc9f0;
+                background: rgba(255, 255, 255, 0.25);
+            }
+
+        ::placeholder {
+            color: #ddd;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(45deg, #00b4d8, #0077b6);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            button:hover {
+                background: linear-gradient(45deg, #0096c7, #005f8a);
+                box-shadow: 0 0 12px rgba(0,180,216,0.4);
+            }
+
+        .links {
+            font-size: 0.9rem;
+            margin-top: 20px;
+            color: #ccc;
+        }
+
+            .links a {
+                color: #4cc9f0;
+                text-decoration: none;
+            }
+
+                .links a:hover {
+                    text-decoration: underline;
+                }
+
+        .error {
+            color: #ff4d6d;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            color: #ccc;
+            font-size: 0.8rem;
+            text-align: center;
+            width: 100%;
+            z-index: 2;
+        }
+
+            footer span {
+                color: #4cc9f0;
+            }
+
+        /* ===== Modals ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .modal-content {
+            margin: 8% auto;
+            padding: 25px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
+            background: rgba(0, 20, 40, 0.9);
+            border-radius: 15px;
+            border: 1px solid rgba(0,180,216,0.4);
+            box-shadow: 0 0 30px rgba(0,180,216,0.4);
+            animation: slideUp 0.5s ease;
+        }
+
+            .modal-content h3 {
+                color: #4cc9f0;
+                text-shadow: 0 0 10px rgba(0,180,216,0.6);
+                margin-bottom: 10px;
+            }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .close:hover {
+                color: #4cc9f0;
+                transform: scale(1.2);
+            }
+
+        .footer-links a {
+            color: #4cc9f0;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+            .footer-links a:hover {
+                color: #00f5d4;
+                text-shadow: 0 0 10px rgba(0,180,216,0.6);
+            }
+
+        .social-icons a {
+            color: #4cc9f0;
+            margin: 0 10px;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .social-icons a:hover {
+                color: #00f5d4;
+                transform: scale(1.25);
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .login-container {
+                width: 90%;
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i> CyberBullying
+        </div>
+        <p class="subtitle">Sign in to your account</p>
+
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Email or Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">LOGIN</button>
+            <p id="errorMsg" class="error"></p>
+        </form>
+
+        <div class="links">
+            <a href="#">Forgot password?</a><br>
+            Don’t have an account? <a href="#">Register here</a>
+        </div>
+    </div>
+
+    <!-- Footer with links -->
+    <footer>
+        <p>@2026 <span>Cyberbullying Detection System</span> — Promoting Online Safety</p>
+        <div class="footer-links">
+            <a href="#" onclick="document.getElementById('aboutModal').style.display='block'">About System</a> |
+            <a href="#" onclick="document.getElementById('contactModal').style.display='block'">Contact</a>
+        </div>
+    </footer>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('aboutModal').style.display='none'">&times;</span>
+            <h3>About System</h3>
+            <p>
+                The <strong>Cyberbullying Detection System</strong> is an AI-powered platform designed to identify and prevent online harassment across digital platforms.
+                It analyzes text messages in real time using NLP and machine learning to detect toxic behavior, hate speech, and offensive language.
+                The system helps organizations and communities maintain safer online spaces by automatically flagging harmful content and encouraging respectful communication.
+            </p>
+            <p>
+                Administrators can track incidents, generate analytical reports, and respond to cyberbullying cases efficiently.
+                Our mission is to strengthen online safety and awareness for a resilient digital society.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
+            <h3>Contact Us</h3>
+            <p>Email: <a href="mailto:support@cybersafety.org" style="color:#4cc9f0;">support@cybersafety.org</a></p>
+            <p>Phone: +251-9XX-XXX-XXX</p>
+
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://t.me/YourTelegramUsername" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const validUsers = [
+            { username: "admin", password: "admin123" },
+            { username: "moderator", password: "mod123" },
+            { username: "viewer", password: "view123" }
+        ];
+
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value.trim();
+            const errorMsg = document.getElementById("errorMsg");
+
+            const match = validUsers.find(u => u.username === user && u.password === pass);
+            if (match) {
+                window.location.href = "dashboard.html";
+            } else {
+                errorMsg.textContent = "❌ Invalid username or password!";
+            }
+        });
+    </script>
+</body>
+</html>

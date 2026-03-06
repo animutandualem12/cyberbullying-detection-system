@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberbullying Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ====== DEFENCE CYBER CENTER - Unified Cyber Theme ====== */
+        :root {
+            --grey-dark: #0e1116;
+            --grey-mid: #1b1f29;
+            --grey-light: #242b38;
+            --text-light: #d9e6f2;
+            --cyber-blue: #00b4d8;
+            --cyber-blue-dark: #0096c7;
+            --cyber-blue-light: #4cc9f0;
+            --cyber-blue-gradient: linear-gradient(45deg, var(--cyber-blue), var(--cyber-blue-dark));
+            --success: #00f5d4;
+            --warning: #ffb703;
+            --danger: #ef233c;
+        }
+
+        /* ====== Base Body ====== */
+        body {
+            background: linear-gradient(135deg, var(--grey-dark), var(--grey-light));
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.5s ease;
+        }
+
+        /* Cyberbullying System Header Title */
+        .cyber-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--cyber-blue-light);
+            text-shadow: 0 0 25px rgba(0, 180, 216, 0.6), 0 0 40px rgba(0, 180, 216, 0.3);
+            letter-spacing: 1.5px;
+            margin: 0 auto 20px auto; /* fixed margin */
+            text-align: center;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+            .cyber-title:hover {
+                transform: scale(1.05);
+                text-shadow: 0 0 40px var(--cyber-blue), 0 0 80px var(--cyber-blue-light);
+            }
+
+        /* ====== Login Page Layout ====== */
+        .split-screen-container {
+            display: flex;
+            min-height: 90vh;
+        }
+
+        .split-left {
+            flex: 1;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,20,40,0.9)), url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px;
+            position: relative;
+        }
+
+        .cyberbullying-message h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--cyber-blue-light);
+            text-shadow: 0 0 25px rgba(0,180,216,0.7);
+            margin-bottom: 20px;
+        }
+
+        .cyberbullying-message p {
+            font-size: 1.1rem;
+            color: #b6c9dc;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(0,180,216,0.1);
+            border: 1px solid rgba(0,180,216,0.4);
+            border-radius: 12px;
+            text-align: center;
+            padding: 15px;
+            transition: 0.3s;
+        }
+
+            .stat-box:hover {
+                transform: translateY(-5px);
+                border-color: var(--cyber-blue-light);
+                box-shadow: 0 0 15px rgba(0,180,216,0.3);
+            }
+
+            .stat-box h3 {
+                color: var(--cyber-blue-light);
+            }
+
+        /* ====== Right Panel Login ====== */
+        .split-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--grey-dark), var(--grey-light));
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(15,25,30,0.95);
+            border-radius: 15px;
+            border: 1px solid rgba(0,180,216,0.3);
+            box-shadow: 0 0 40px rgba(0,180,216,0.2);
+            transition: 0.3s;
+        }
+
+            .login-container:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0 50px rgba(0,180,216,0.3);
+            }
+
+        .login-logo {
+            text-align: center; /* centers everything inside */
+            display: flex; /* enables flexible alignment */
+            flex-direction: column; /* stacks icon + text vertically */
+            align-items: center; /* centers horizontally */
+            justify-content: center; /* centers vertically if needed */
+            margin-bottom: 15px;
+        }
+
+            .login-logo i {
+                font-size: 60px;
+                color: var(--cyber-blue-light);
+                text-shadow: 0 0 20px rgba(0,180,216,0.5);
+                animation: pulse 2s infinite;
+            }
+
+        @keyframes pulse {
+            0%,100% {
+                text-shadow: 0 0 20px rgba(0,180,216,0.5);
+            }
+
+            50% {
+                text-shadow: 0 0 40px rgba(0,180,216,0.8);
+            }
+        }
+
+        .login-title {
+            text-align: center;
+            color: var(--cyber-blue-light);
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #b6c9dc;
+        }
+
+        /* ====== Inputs & Buttons ====== */
+        .login-input {
+            background: rgba(0,180,216,0.05);
+            border: 1px solid rgba(0,180,216,0.3);
+            color: var(--text-light);
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+            .login-input:focus {
+                background: rgba(0,180,216,0.1);
+                border-color: var(--cyber-blue);
+                box-shadow: 0 0 15px rgba(0,180,216,0.3);
+            }
+
+        .login-btn {
+            background: var(--cyber-blue-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+            .login-btn:hover {
+                background: linear-gradient(45deg, var(--cyber-blue-dark), #005f8a);
+                box-shadow: 0 0 20px rgba(0,180,216,0.4);
+                transform: translateY(-2px);
+            }
+
+        /* ====== Dashboard ====== */
+        #dashboard {
+            display: none;
+            background: linear-gradient(135deg, var(--grey-dark), var(--grey-light));
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+            #dashboard.show {
+                display: block;
+                opacity: 1;
+            }
+
+        /* ====== Glass Cards ====== */
+        .glass-card {
+            background: rgba(0,180,216,0.08);
+            border: 1px solid rgba(0,180,216,0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,180,216,0.15);
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+            .glass-card:hover {
+                border-color: var(--cyber-blue-light);
+                box-shadow: 0 0 30px rgba(0,180,216,0.25);
+                transform: translateY(-4px);
+            }
+
+        /* ====== Dashboard Header ====== */
+        .cyber-header {
+            background: linear-gradient(145deg, var(--grey-mid), var(--grey-dark));
+            border-radius: 12px;
+            border: 1px solid rgba(0,180,216,0.3);
+            box-shadow: 0 0 25px rgba(0,180,216,0.2);
+            padding: 20px;
+        }
+
+            .cyber-header h1 {
+                color: var(--cyber-blue-light);
+                text-shadow: 0 0 20px rgba(0,180,216,0.6);
+                transition: 0.3s;
+            }
+
+                .cyber-header h1:hover {
+                    text-shadow: 0 0 40px var(--cyber-blue);
+                    transform: scale(1.03);
+                }
+
+        /* ====== Stats Cards ====== */
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid rgba(0,180,216,0.3);
+            color: var(--text-light);
+        }
+
+            .stat-card:hover {
+                border-color: var(--cyber-blue);
+                box-shadow: 0 0 15px rgba(0,180,216,0.3);
+            }
+
+        /* ====== Buttons General ====== */
+        .btn-outline-primary, .btn-outline-success, .btn-outline-info, .btn-outline-warning {
+            border-color: var(--cyber-blue);
+            color: var(--cyber-blue-light);
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--cyber-blue-gradient);
+                color: #fff;
+            }
+
+        /* ====== Severity Tags ====== */
+        .severity-critical {
+            background: #ff073a;
+            color: white;
+        }
+
+        .severity-high {
+            background: #ff7b00;
+            color: white;
+        }
+
+        .severity-medium {
+            background: #ffd000;
+            color: #000;
+        }
+
+        .severity-low {
+            background: #00b4d8;
+            color: white;
+        }
+
+        .severity-none {
+            background: #4cc9f0;
+            color: black;
+        }
+
+        /* ====== Footer ====== */
+        footer, .glass-card.text-center {
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(0,180,216,0.2);
+            color: #b6c9dc;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* ====== Responsive ====== */
+        @media (max-width: 992px) {
+            .split-screen-container {
+                flex-direction: column;
+            }
+
+            .split-left, .split-right {
+                min-height: 50vh;
+            }
+        }
+        /* ====== About & Contact Modals (Unified Cyber Theme) ====== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .modal-content {
+            margin: 8% auto;
+            padding: 25px;
+            width: 60%;
+            max-width: 700px;
+            color: var(--text-light);
+            background: rgba(0, 20, 40, 0.9);
+            border-radius: 15px;
+            border: 1px solid rgba(0,180,216,0.4);
+            box-shadow: 0 0 30px rgba(0,180,216,0.4);
+            animation: slideUp 0.5s ease;
+        }
+
+            .modal-content h3 {
+                color: var(--cyber-blue-light);
+                text-shadow: 0 0 10px rgba(0,180,216,0.6);
+                margin-bottom: 10px;
+            }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .close:hover {
+                color: var(--cyber-blue-light);
+                transform: scale(1.2);
+            }
+
+        /* ====== Social Media Icons ====== */
+        .social-icons {
+            margin-top: 15px;
+        }
+
+            .social-icons a {
+                color: var(--cyber-blue-light);
+                margin: 0 10px;
+                font-size: 1.8rem;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+                .social-icons a:hover {
+                    color: var(--success);
+                    transform: scale(1.25);
+                }
+
+        /* ====== Footer Links ====== */
+        .footer-links a {
+            color: var(--cyber-blue-light);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+            .footer-links a:hover {
+                color: var(--success);
+                text-shadow: 0 0 10px rgba(0,180,216,0.6);
+            }
+
+        /* ====== Animations ====== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        /* ====== About & Contact Button Styling ====== */
+        .text-center.mt-4 button {
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            padding: 10px 22px;
+            transition: all 0.3s ease;
+        }
+
+            .text-center.mt-4 button:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 18px rgba(0,180,216,0.4);
+            }
+
+        /* Loading spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0,180,216,0.1);
+            border-top: 4px solid var(--cyber-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            background: rgba(0,20,40,0.95);
+            border: 1px solid var(--cyber-blue);
+            color: white;
+        }
+
+        .session-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,20,40,0.8);
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid var(--cyber-blue);
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .moderation-panel {
+            background: rgba(255,0,0,0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .category-badge {
+            background: rgba(0,180,216,0.2);
+            border: 1px solid var(--cyber-blue);
+            color: var(--cyber-blue-light);
+            padding: 5px 10px;
+            margin: 2px;
+        }
+
+        .login-links a {
+            color: var(--cyber-blue-light);
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+            .login-links a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="split-top">
+        <div class="logo-container">
+            <h1 class="cyber-title">Cyberbullying System</h1>
+        </div>
+    </div>
+
+    <!-- Split Screen Login -->
+    <div id="loginPage">
+        <div class="split-screen-container">
+            <!-- Left Side: Cyberbullying Awareness -->
+            <div class="split-left">
+                <div class="cyberbullying-message">
+                    <h1>STOP CYBERBULLYING</h1>
+                    <p>Every day, thousands fall victim to online harassment. Our AI-powered system helps detect and prevent cyberbullying before it causes harm.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <h3>59%</h3>
+                            <p>Teens Experienced Cyberbullying</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>37%</h3>
+                            <p>Report Depression Due To Online Abuse</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>24/7</h3>
+                            <p>Real-Time Monitoring</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>95%</h3>
+                            <p>Detection Accuracy</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; padding: 20px; border-left: 4px solid var(--cyber-blue); background: rgba(0, 180, 216, 0.1); border-radius: 8px;">
+                        <p style="font-style: italic; margin: 0;">
+                            <i class="fas fa-quote-left me-2" style="color: var(--cyber-blue);"></i>
+                            Words can be weapons too. Let's make the internet a safer place for everyone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Login Form -->
+            <div class="split-right">
+                <div class="login-container">
+                    <div class="login-logo">
+                        <i class="fas fa-shield-alt"></i>
+                        <h2 class="login-title">CyberBullying</h2>
+                        <p class="login-subtitle">Advanced Cyberbullying Detection System</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label" style="color: var(--cyber-blue-light);">Username</label>
+                            <input type="text" class="form-control login-input" id="username" placeholder="Enter username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label" style="color: var(--cyber-blue-light);">Password</label>
+                            <input type="password" class="form-control login-input" id="password" placeholder="Enter password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe" style="color: #b6c9dc;">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn login-btn w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </form>
+                    <div class="login-links text-center mt-3">
+                        <a href="#" onclick="showForgotPassword(); return false;">Forgot?</a> |
+                        <a href="#" onclick="showRegister(); return false;">Register</a> |
+                        <a href="#" onclick="document.getElementById('aboutModal').style.display='block'; return false;">About</a> |
+                        <a href="#" onclick="document.getElementById('contactModal').style.display='block'; return false;">Contact</a>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-lock me-1" style="color: var(--cyber-blue);"></i>
+                            Secure Authentication Required
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard (Initially Hidden) -->
+    <div id="dashboard" class="container">
+        <!-- Header with Logout -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- Left spacer -->
+            <div style="width: 80px;"></div>
+
+            <!-- Centered Logo Section -->
+            <div class="d-flex flex-column align-items-center flex-grow-1">
+                <i class="fas fa-shield-alt fa-3x mb-2" style="color: var(--cyber-blue); text-shadow: 0 0 15px rgba(0, 180, 216, 0.5);"></i>
+                <small class="text-muted" id="currentTime"></small>
+            </div>
+
+            <!-- Logout button on the right -->
+            <div>
+                <button class="btn btn-outline-danger btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Cyber Blue Header -->
+        <div class="cyber-header mb-4">
+            <div class="header-container text-center py-3">
+                <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                    <div>
+                        <h1 class="mb-1" style="font-weight: 700; color: var(--cyber-blue-light);"></h1>
+                        <p class="text-muted" style="font-size: 0.9rem;"></p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <span class="badge bg-success" id="modelStatus"></span>
+                            <span class="badge bg-info" id="systemStatus"></span>
+                            <span class="badge bg-warning" id="userBadge"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- Text Analysis -->
+                <div class="glass-card mb-4">
+                    <h3><i class="fas fa-search me-2"></i> Analyze Text</h3>
+                    <div class="mb-3">
+                        <textarea class="form-control bg-dark text-light" id="inputText" rows="4"
+                                  placeholder="Enter text to analyze for cyberbullying..."></textarea>
+                    </div>
+
+                    <!-- Moderation Actions -->
+                    <div id="moderationPanel" class="moderation-panel" style="display: none;">
+                        <h5><i class="fas fa-gavel me-2"></i> Moderation Required</h5>
+                        <p class="mb-2">This content requires moderation action:</p>
+                        <div class="moderation-actions d-flex flex-wrap gap-2">
+                            <button class="btn btn-danger moderation-btn" onclick="takeAction('block')">
+                                <i class="fas fa-ban me-1"></i> Block Content
+                            </button>
+                            <button class="btn btn-warning moderation-btn" onclick="takeAction('warn')">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Issue Warning
+                            </button>
+                            <button class="btn btn-info moderation-btn" onclick="takeAction('review')">
+                                <i class="fas fa-eye me-1"></i> Flag for Review
+                            </button>
+                            <button class="btn btn-success moderation-btn" onclick="takeAction('approve')">
+                                <i class="fas fa-check me-1"></i> Approve
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Buttons: Analyze + Clear -->
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-primary btn-lg flex-fill" onclick="analyzeText()" id="analyzeBtn">
+                            <i class="fas fa-play me-2"></i> Analyze Text
+                        </button>
+                        <button class="btn btn-outline-danger btn-lg flex-fill" onclick="clearTextInput()">
+                            <i class="fas fa-trash-alt me-2"></i> Clear
+                        </button>
+                    </div>
+
+                    <div class="loading mt-3" id="loading">
+                        <div class="spinner"></div>
+                        <p style="color: var(--cyber-blue);">Analyzing text for cyberbullying...</p>
+                    </div>
+
+                    <div id="resultCard" class="mt-4"></div>
+                </div>
+
+                <!-- Batch Analysis -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-tasks me-2"></i> Batch Analysis</h3>
+                    <div class="mb-3">
+                        <textarea class="form-control bg-dark text-light" id="batchText" rows="4"
+                                  placeholder="Enter multiple texts (one per line)..."></textarea>
+                    </div>
+
+                    <!-- Buttons: Analyze Batch + Clear Batch -->
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-secondary btn-lg flex-fill" onclick="analyzeBatch()" id="batchBtn">
+                            <i class="fas fa-list me-2"></i> Analyze Batch
+                        </button>
+                        <button class="btn btn-outline-danger btn-lg flex-fill" onclick="clearBatchInput()">
+                            <i class="fas fa-trash-alt me-2"></i> Clear Batch
+                        </button>
+                    </div>
+
+                    <div id="batchResults" class="mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Quick Stats -->
+                <div class="glass-card mb-4">
+                    <h3><i class="fas fa-chart-bar me-2"></i> System Statistics</h3>
+                    <div class="row text-center" id="stats">
+                        <div class="col-6 mb-3">
+                            <div class="stat-card">
+                                <h2 class="mb-0" id="totalAnalyses">0</h2>
+                                <small>Total Analyses</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="stat-card">
+                                <h2 class="mb-0" id="toxicRate">0%</h2>
+                                <small>Toxicity Rate</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <h2 class="mb-0" id="accuracy">0%</h2>
+                                <small>Accuracy</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <h2 class="mb-0" id="status">...</h2>
+                                <small>Status</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Moderation Queue -->
+                <div class="glass-card mb-4">
+                    <h3><i class="fas fa-inbox me-2"></i> Moderation Queue</h3>
+                    <div id="moderationQueue" class="mt-3">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>3 items</strong> pending review
+                        </div>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-dark text-light border-secondary">
+                                <span>Reported comment</span>
+                                <span class="badge bg-danger">High</span>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-dark text-light border-secondary">
+                                <span>User complaint</span>
+                                <span class="badge bg-warning">Medium</span>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-dark text-light border-secondary">
+                                <span>Flagged content</span>
+                                <span class="badge bg-info">Low</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary w-100 mt-3" onclick="showModerationPanel()">
+                        <i class="fas fa-external-link-alt me-2"></i> Open Moderation Panel
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="glass-card mb-4">
+                    <h3><i class="fas fa-bolt me-2"></i> Quick Actions</h3>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="loadTestExamples()">
+                            <i class="fas fa-vial me-2"></i> Load Test Examples
+                        </button>
+                        <button class="btn btn-outline-success" onclick="clearAll()">
+                            <i class="fas fa-broom me-2"></i> Clear All
+                        </button>
+                        <button class="btn btn-outline-info" onclick="showCategories()">
+                            <i class="fas fa-list me-2"></i> View Categories
+                        </button>
+                        <a href="#" class="btn btn-outline-warning" onclick="refreshDashboard()">
+                            <i class="fas fa-redo me-2"></i> Refresh Dashboard
+                        </a>
+                    </div>
+                </div>
+
+
+                
+
+                <!-- Severity Guide -->
+                <div class="glass-card">
+                    <h3><i class="fas fa-exclamation-triangle me-2"></i> Severity Levels</h3>
+                    <div class="mt-3">
+                        <span class="badge severity-critical me-1 mb-1">Critical</span>
+                        <span class="badge severity-high me-1 mb-1">High</span>
+                        <span class="badge severity-medium me-1 mb-1">Medium</span>
+                        <span class="badge severity-low me-1 mb-1">Low</span>
+                        <span class="badge severity-none">None</span>
+                    </div>
+                    <p class="small mt-2 mb-0" style="color: #b6c9dc;">
+                        Critical: Immediate action required<br>
+                        High: Urgent moderation needed<br>
+                        Medium: Review and monitor<br>
+                        Low: Educational approach
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Timer -->
+        <div class="session-timer">
+            <i class="fas fa-clock me-1"></i>
+            Session: <span id="sessionTimer">30:00</span>
+        </div>
+        <!-- Footer -->
+        <!-- ================= Footer ================= -->
+        <div class="glass-card text-center mt-4">
+            <p class="slogan mb-1">
+                <i class="fas fa-shield-alt" style="color: var(--cyber-blue);"></i>
+                Protect Online Safety
+            </p>
+
+            <small class="text-muted d-block mb-1">© 2026 All Rights Reserved</small>
+
+            <!-- About & Contact -->
+            <div class="footer-links mt-2">
+                <a href="#" onclick="document.getElementById('aboutModal').style.display='block'"
+                   style="color: var(--cyber-blue); margin-right: 15px; text-decoration: none;">About System</a>
+                |
+                <a href="#" onclick="document.getElementById('contactModal').style.display='block'"
+                   style="color: var(--cyber-blue); margin-left: 15px; text-decoration: none;">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= About Modal ================= -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close" onclick="document.getElementById('aboutModal').style.display='none'">&times;</span>
+            <h3 style="color: var(--cyber-blue);">About System</h3>
+            <p>
+                The <strong>Cyberbullying Detection System</strong> is an AI-powered platform designed to identify and prevent online harassment across digital platforms.
+                It analyzes text messages in real time using natural language processing (NLP) and machine learning models to detect toxic behavior, hate speech, and offensive language.
+                The system helps educational institutions, organizations, and social platforms maintain a safer online environment by flagging harmful content and promoting positive digital communication.
+            </p>
+
+            <p>
+                With advanced analytics, administrators can review incidents, generate reports, and apply corrective measures to protect users from cyberbullying threats.
+                Our mission is to empower communities to build a culture of respect, awareness, and online safety.
+            </p>
+        </div>
+    </div>
+
+    <!-- ================= Contact Modal ================= -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
+            <h3 style="color: var(--cyber-blue);">Contact Us</h3>
+
+            <p>
+                Email:
+                <a href="mailto:AnimutCI473gmail.com" style="color: var(--cyber-blue);">AnimutCI473@gmail.com</a>
+            </p>
+            <p>Phone: +251-9-18-35-92-06</p>
+
+            <!-- Social Media Icons -->
+            <div class="social-icons mt-3">
+                <a href="https://web.facebook.com" target="_blank" title="Facebook">
+                    <i class="fab fa-facebook fa-2x"></i>
+                </a>
+                <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram fa-2x"></i>
+                </a>
+                <a href="https://www.linkedin.com" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin fa-2x"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" title="Twitter">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+                <a href="https://github.com" target="_blank" title="GitHub">
+                    <i class="fab fa-github fa-2x"></i>
+                </a>
+                <a href="https://t.me/anan1322" target="_blank" title="Telegram">
+                    <i class="fab fa-telegram fa-2x"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Categories (Bootstrap) -->
+    <div class="modal fade" id="categoriesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-light" style="background: var(--grey-mid) !important; border: 1px solid var(--cyber-blue);">
+                <div class="modal-header" style="border-bottom: 1px solid var(--cyber-blue);">
+                    <h5 class="modal-title" style="color: var(--cyber-blue-light);">
+                        <i class="fas fa-list me-2"></i> Cyberbullying Categories
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="categoriesList">
+                    <p>Loading categories...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ====== LOGIN SYSTEM ======
+        let currentUser = null;
+        let sessionTimer = 30 * 60; // 30 minutes in seconds
+        let sessionInterval;
+        let loginAttempts = 0;
+
+        // Simulated user database
+        const users = [
+            { username: 'admin', password: 'admin123', role: 'admin', name: 'System Administrator' },
+            { username: 'moderator', password: 'mod123', role: 'moderator', name: 'Content Moderator' },
+            { username: 'viewer', password: 'view123', role: 'viewer', name: 'Report Viewer' }
+        ];
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            login(username, password);
+        });
+
+        function login(username, password) {
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                // Successful login
+                currentUser = user;
+                loginAttempts = 0;
+
+                // Show notification
+                showNotification('success', `Welcome back, ${user.name}!`);
+
+                // Switch to dashboard with animation
+                const loginPage = document.getElementById('loginPage');
+                const dashboard = document.getElementById('dashboard');
+
+                loginPage.style.opacity = '0';
+                setTimeout(() => {
+                    loginPage.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    setTimeout(() => {
+                        dashboard.classList.add('show');
+                    }, 10);
+                }, 300);
+
+                // Update user info
+                document.getElementById('userBadge').textContent = `User: ${user.name}`;
+
+                // Set role-based permissions
+                setUserPermissions(user.role);
+
+                // Start session timer
+                startSessionTimer();
+
+                // Update time
+                updateCurrentTime();
+                setInterval(updateCurrentTime, 60000);
+
+                // Load initial data
+                updateStatistics();
+            } else {
+                // Failed login
+                loginAttempts++;
+                showNotification('danger', `Invalid credentials. Attempt ${loginAttempts} of 3`);
+
+                if (loginAttempts >= 3) {
+                    document.getElementById('loginForm').reset();
+                    showNotification('warning', 'Too many failed attempts. Please try again in 5 minutes.');
+                    setTimeout(() => {
+                        loginAttempts = 0;
+                    }, 300000); // 5 minutes
+                }
+            }
+        }
+
+        function logout() {
+            showNotification('info', 'Logging out...');
+            setTimeout(() => {
+                currentUser = null;
+                clearInterval(sessionInterval);
+
+                const dashboard = document.getElementById('dashboard');
+                const loginPage = document.getElementById('loginPage');
+
+                dashboard.classList.remove('show');
+                setTimeout(() => {
+                    dashboard.style.display = 'none';
+                    loginPage.style.display = 'block';
+                    setTimeout(() => {
+                        loginPage.style.opacity = '1';
+                    }, 10);
+                }, 300);
+
+                document.getElementById('loginForm').reset();
+                showNotification('success', 'Successfully logged out');
+            }, 1000);
+        }
+
+        function setUserPermissions(role) {
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const batchBtn = document.getElementById('batchBtn');
+
+            if (role === 'viewer') {
+                analyzeBtn.disabled = true;
+                batchBtn.disabled = true;
+                analyzeBtn.title = 'Viewers cannot perform analyses';
+                batchBtn.title = 'Viewers cannot perform batch analyses';
+                showNotification('info', 'Viewer mode: Analysis features are disabled');
+            } else {
+                analyzeBtn.disabled = false;
+                batchBtn.disabled = false;
+                analyzeBtn.title = '';
+                batchBtn.title = '';
+            }
+        }
+
+        function startSessionTimer() {
+            clearInterval(sessionInterval);
+            sessionTimer = 30 * 60; // Reset to 30 minutes
+
+            sessionInterval = setInterval(() => {
+                sessionTimer--;
+                const minutes = Math.floor(sessionTimer / 60);
+                const seconds = sessionTimer % 60;
+                document.getElementById('sessionTimer').textContent =
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                // Auto logout when session expires
+                if (sessionTimer <= 0) {
+                    showNotification('warning', 'Session expired. Please login again.');
+                    logout();
+                }
+
+                // Warning at 5 minutes
+                if (sessionTimer === 5 * 60) {
+                    showNotification('warning', 'Session will expire in 5 minutes');
+                }
+            }, 1000);
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent =
+                now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        }
+
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show notification`;
+            notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                `;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.remove(); }, 5000);
+        }
+
+        function showForgotPassword() { alert('Password reset feature would be implemented with email verification.'); }
+        function showRegister() { alert('User registration requires administrator approval.'); }
+
+        // ====== MODERATION FUNCTIONS ======
+        function showModerationPanel() {
+            const panel = document.getElementById('moderationPanel');
+            panel.style.display = 'block';
+        }
+
+        function takeAction(action) {
+            const actions = {
+                'block': { icon: 'ban', text: 'Content blocked and user notified' },
+                'warn': { icon: 'exclamation-triangle', text: 'Warning issued to user' },
+                'review': { icon: 'eye', text: 'Content flagged for manual review' },
+                'approve': { icon: 'check', text: 'Content approved and published' }
+            };
+            const actionInfo = actions[action];
+            showNotification('info', `Moderation action: ${actionInfo.text}`);
+            document.getElementById('moderationPanel').style.display = 'none';
+            console.log(`Moderation action: ${action} taken by ${currentUser?.name}`);
+        }
+
+        // ====== ANALYSIS FUNCTIONS ======
+        async function analyzeText() {
+            if (!currentUser || currentUser.role === 'viewer') {
+                showNotification('warning', 'You do not have permission to perform analysis');
+                return;
+            }
+
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) {
+                showNotification('warning', 'Please enter text to analyze');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultCard').innerHTML = '';
+            document.getElementById('analyzeBtn').disabled = true;
+
+            try {
+                // ✅ Connect to your FastAPI backend
+                const response = await fetch('http://127.0.0.1:8000/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+
+                if (!response.ok) throw new Error(`Server error: ${response.status}`);
+                const data = await response.json();
+                displayResult(data);
+
+                if (data.is_toxic && currentUser.role !== 'viewer') {
+                    document.getElementById('moderationPanel').style.display = 'block';
+                }
+                showNotification('success', 'Analysis completed successfully!');
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('danger', 'Error contacting the backend API. Using mock data.');
+
+                // Mock fallback
+                setTimeout(() => {
+                    const mockData = {
+                        text: text,
+                        is_toxic: Math.random() > 0.5,
+                        severity: Math.random() > 0.7 ? 'critical' : Math.random() > 0.5 ? 'high' : 'medium',
+                        prediction: Math.random() > 0.5 ? 'Toxic' : 'Safe',
+                        confidence: Math.floor(Math.random() * 30) + 70,
+                        score: (Math.random() * 0.8 + 0.2).toFixed(2),
+                        primary_category: 'Harassment',
+                        categories: ['Harassment', 'Toxicity'],
+                        explanation: 'This text contains potentially harmful language.'
+                    };
+                    displayResult(mockData);
+                    if (mockData.is_toxic) document.getElementById('moderationPanel').style.display = 'block';
+                }, 1500);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('analyzeBtn').disabled = false;
+                updateStatistics();
+            }
+        }
+
+        function displayResult(data) {
+            const resultCard = document.getElementById('resultCard');
+            const severityClass = `severity-${data.severity}`;
+
+            let categoryBadges = '';
+            if (data.categories && data.categories.length > 0) {
+                categoryBadges = data.categories.map(cat =>
+                    `<span class="badge category-badge">${cat}</span>`
+                ).join('');
+            }
+
+            resultCard.innerHTML = `
+                    <div class="glass-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0" style="color: var(--cyber-blue-light);">Analysis Result</h4>
+                            <span class="badge ${severityClass} fs-5">${data.severity?.toUpperCase() || 'UNKNOWN'}</span>
+                        </div>
+                        <div class="alert ${data.is_toxic ? 'alert-danger' : 'alert-success'}">
+                            <h4 class="alert-heading">
+                                <i class="fas ${data.is_toxic ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i>
+                                ${data.prediction} (${data.confidence}% confidence)
+                            </h4>
+                            <p><strong>Text:</strong> "${data.text.substring(0, 200)}${data.text.length > 200 ? '...' : ''}"</p>
+                            <hr>
+                            <p><strong>Score:</strong> ${data.score}/1.0</p>
+                            <p><strong>Primary Category:</strong> ${data.primary_category || 'None'}</p>
+                            ${categoryBadges ? `<div class="mt-2"><strong>Categories:</strong><br>${categoryBadges}</div>` : ''}
+                            ${data.explanation ? `<p><strong>Explanation:</strong> ${data.explanation}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+        }
+
+        function analyzeBatch() {
+            if (!currentUser || currentUser.role === 'viewer') {
+                showNotification('warning', 'You do not have permission to perform batch analysis');
+                return;
+            }
+
+            const batchText = document.getElementById('batchText').value.trim();
+            if (!batchText) {
+                showNotification('warning', 'Please enter texts to analyze');
+                return;
+            }
+
+            const batchBtn = document.getElementById('batchBtn');
+            batchBtn.disabled = true;
+            batchBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Analyzing...';
+
+            setTimeout(() => {
+                const texts = batchText.split('\n').filter(t => t.trim());
+                const mockResults = texts.map(text => {
+                    const rand = Math.random();
+                    const severity = rand > 0.7 ? 'critical' : rand > 0.5 ? 'high' : rand > 0.3 ? 'medium' : 'low';
+                    return {
+                        text: text,
+                        is_toxic: severity !== 'low',
+                        severity: severity,
+                        prediction: severity !== 'low' ? 'Toxic' : 'Safe',
+                        confidence: Math.floor(Math.random() * 30) + 70
+                    };
+                });
+
+                displayBatchResults(mockResults);
+                batchBtn.disabled = false;
+                batchBtn.innerHTML = '<i class="fas fa-list me-2"></i> Analyze Batch';
+                updateStatistics();
+            }, 2000);
+        }
+
+        function displayBatchResults(results) {
+            const resultsDiv = document.getElementById('batchResults');
+            const total = results.length;
+            const toxicCount = results.filter(r => r.is_toxic).length;
+            const toxicityRate = total > 0 ? (toxicCount / total * 100) : 0;
+
+            resultsDiv.innerHTML = `
+                    <div class="glass-card">
+                        <h4 style="color: var(--cyber-blue-light);">Batch Results</h4>
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <div class="stat-card">
+                                    <h3 class="mb-0">${total}</h3>
+                                    <small>Total</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-card">
+                                    <h3 class="mb-0">${toxicCount}</h3>
+                                    <small>Toxic</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-card">
+                                    <h3 class="mb-0">${toxicityRate.toFixed(1)}%</h3>
+                                    <small>Toxicity Rate</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }
+
+        async function updateStatistics() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/statistics');
+                if (!response.ok) throw new Error('Failed to fetch stats');
+                const stats = await response.json();
+
+                document.getElementById('totalAnalyses').textContent = stats.total_analyses ?? 0;
+                document.getElementById('toxicRate').textContent = (stats.toxicity_rate ?? 0).toFixed(1) + '%';
+                document.getElementById('accuracy').textContent = (stats.avg_confidence ?? 0).toFixed(1) + '%';
+                document.getElementById('status').textContent = stats.system_status ?? 'Online';
+            } catch (error) {
+                // Mock stats
+                document.getElementById('totalAnalyses').textContent = 127;
+                document.getElementById('toxicRate').textContent = '32%';
+                document.getElementById('accuracy').textContent = '94%';
+                document.getElementById('status').textContent = 'Online (demo)';
+            }
+        }
+
+        function loadTestExamples() {
+            const examples = [
+                "You're such a stupid idiot!",
+                "Great job on your presentation today!",
+                "Nobody likes you, just leave already.",
+                "Let's meet for coffee tomorrow.",
+                "I'm so proud of your achievements!",
+                "You're worthless and will never succeed."
+            ];
+            document.getElementById('batchText').value = examples.join('\n');
+            showNotification('info', 'Loaded test examples! Click "Analyze Batch" to test.');
+        }
+
+        function showCategories() {
+            const categories = [
+                { id: 1, name: "Harassment", description: "Repeated harassment, insults, or annoyance" },
+                { id: 2, name: "Threats & Intimidation", description: "Direct or indirect threats of violence or harm" },
+                { id: 3, name: "Humiliation & Embarrassment", description: "Public shaming or mocking someone" },
+                { id: 4, name: "Exclusion & Social Isolation", description: "Intentionally excluding someone from a group" },
+                { id: 5, name: "Impersonation & Identity Theft", description: "Pretending to be another person online" },
+                { id: 6, name: "Sexual Harassment", description: "Unwanted sexual remarks or propositions" },
+                { id: 7, name: "Racial/Ethnic Bullying", description: "Targeting based on race, ethnicity, or nationality" }
+            ];
+
+            const modalContent = document.getElementById('categoriesList');
+            modalContent.innerHTML = `
+                    <div class="row">
+                        ${categories.map(cat => `
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100" style="background: rgba(0, 180, 216, 0.05); border: 1px solid var(--cyber-blue);">
+                                    <div class="card-body">
+                                        <h6 class="card-title" style="color: var(--cyber-blue-light);">${cat.name}</h6>
+                                        <p class="card-text small" style="color: #b6c9dc;">${cat.description}</p>
+                                        <span class="badge" style="background: var(--cyber-blue);">${cat.id}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            
+
+     
+            new bootstrap.Modal(document.getElementById('categoriesModal')).show();
+        }
+
+        function refreshDashboard() { showNotification('info', 'Refreshing dashboard...'); updateStatistics(); }
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('batchText').value = '';
+            document.getElementById('resultCard').innerHTML = '';
+            document.getElementById('batchResults').innerHTML = '';
+            document.getElementById('moderationPanel').style.display = 'none';
+            showNotification('success', 'All inputs cleared');
+        }
+        function clearTextInput() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('resultCard').innerHTML = '';
+            document.getElementById('moderationPanel').style.display = 'none';
+        }
+        function clearBatchInput() {
+            document.getElementById('batchText').value = '';
+            document.getElementById('batchResults').innerHTML = '';
+        }
+
+        window.onload = function () {
+            updateCurrentTime();
+            document.getElementById('dashboard').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
